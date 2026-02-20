@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+
+# Sanity
+dist/
+.sanity/
+
+# Misc
+.DS_Store
+
+# Logs
+*.log
+
+# Local env files
+.env
+.env.local

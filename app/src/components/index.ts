@@ -1,0 +1,10 @@
+export { default as Header } from './Header';
+export { default as Hero } from './Hero';
+export { default as Bio } from './Bio';
+export { default as News } from './News';
+export { default as VideoSection } from './VideoSection';
+export { default as Gallery } from './Gallery';
+export { default as Sponsors } from './Sponsors';
+export { default as ContactForm } from './ContactForm';
+export { default as Footer } from './Footer';
+export { default as CookieConsent } from './CookieConsent';
