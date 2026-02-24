@@ -21,6 +21,7 @@ export interface SiteSettings {
     facebook?: string;
     twitter?: string;
     instagram?: string;
+    threads?: string;
   };
   privacyPolicyPage?: LegalPage;
   termsOfUsePage?: LegalPage;
@@ -44,16 +45,27 @@ export interface NewsArticle {
   _id: string;
   _type: 'newsArticle';
   title: string;
-  body: PortableTextBlock[];
   image: SanityImage;
   date: string;
   externalLink?: string;
 }
 
+export interface SanityFile {
+  _type: 'file';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+    url?: string;
+  };
+}
+
 export interface Video {
   _id: string;
   _type: 'video';
-  youtubeUrl: string;
+  youtubeUrl?: string;
+  videoFile?: SanityFile;
+  videoFileUrl?: string;
+  thumbnail?: SanityImage;
 }
 
 export interface GalleryImage {
@@ -91,6 +103,14 @@ export interface ContactSection {
   buttonText: string;
 }
 
+export interface ScheduleEvent {
+  _id: string;
+  _type: 'scheduleEvent';
+  raceName: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface ContactFormData {
   firstName: string;
   lastName: string;
@@ -107,6 +127,7 @@ export interface HomePageData {
   newsArticles: NewsArticle[];
   videos: Video[];
   galleryImages: GalleryImage[];
+  scheduleEvents: ScheduleEvent[];
   sponsors: Sponsor[];
   contactSection: ContactSection;
 }

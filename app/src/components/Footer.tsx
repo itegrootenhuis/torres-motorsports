@@ -11,7 +11,7 @@ interface FooterProps {
 
 export default function Footer({ settings }: FooterProps) {
   return (
-    <footer className="bg-white text-primary-black py-8">
+    <footer className="bg-white text-primary-black py-4">
       <div className="container-custom mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo and Text */}

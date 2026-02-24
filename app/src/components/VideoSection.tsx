@@ -6,9 +6,29 @@ import { motion } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight, FaPlay } from 'react-icons/fa';
 import { Video } from '@/types';
 import { extractYouTubeId, getYouTubeThumbnail, getYouTubeEmbedUrl } from '@/lib/youtube';
+import { urlFor } from '@/lib/sanity';
 
 interface VideoSectionProps {
   videos: Video[];
+}
+
+function isYouTubeVideo(video: Video): boolean {
+  return !!video.youtubeUrl && !!extractYouTubeId(video.youtubeUrl);
+}
+
+function isUploadedVideo(video: Video): boolean {
+  return !!video.videoFileUrl;
+}
+
+function getThumbnailUrl(video: Video, index: number): string | null {
+  if (video.thumbnail) {
+    return urlFor(video.thumbnail).width(400).height(225).url();
+  }
+  if (video.youtubeUrl) {
+    const videoId = extractYouTubeId(video.youtubeUrl);
+    if (videoId) return getYouTubeThumbnail(videoId);
+  }
+  return null;
 }
 
 export default function VideoSection({ videos }: VideoSectionProps) {
@@ -18,7 +38,9 @@ export default function VideoSection({ videos }: VideoSectionProps) {
   if (!videos || videos.length === 0) return null;
 
   const activeVideo = videos[activeIndex];
-  const activeVideoId = extractYouTubeId(activeVideo?.youtubeUrl || '');
+  const isActiveYouTube = isYouTubeVideo(activeVideo);
+  const isActiveUploaded = isUploadedVideo(activeVideo);
+  const activeVideoId = isActiveYouTube ? extractYouTubeId(activeVideo.youtubeUrl!) : null;
 
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (!carouselRef.current) return;
@@ -50,7 +72,7 @@ export default function VideoSection({ videos }: VideoSectionProps) {
           transition={{ duration: 0.6 }}
           className="relative aspect-video w-full max-w-4xl mx-auto mb-8 rounded-lg overflow-hidden bg-zinc-900"
         >
-          {activeVideoId ? (
+          {isActiveYouTube && activeVideoId ? (
             <iframe
               src={getYouTubeEmbedUrl(activeVideoId)}
               title="Video"
@@ -58,6 +80,15 @@ export default function VideoSection({ videos }: VideoSectionProps) {
               allowFullScreen
               className="absolute inset-0 w-full h-full"
             />
+          ) : isActiveUploaded && activeVideo.videoFileUrl ? (
+            <video
+              src={activeVideo.videoFileUrl}
+              controls
+              className="absolute inset-0 w-full h-full object-contain"
+              poster={activeVideo.thumbnail ? urlFor(activeVideo.thumbnail).width(1280).height(720).url() : undefined}
+            >
+              Your browser does not support the video tag.
+            </video>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-gray-500">
               No video available
@@ -91,8 +122,8 @@ export default function VideoSection({ videos }: VideoSectionProps) {
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {videos.map((video, index) => {
-                const videoId = extractYouTubeId(video.youtubeUrl);
-                if (!videoId) return null;
+                const thumbnailUrl = getThumbnailUrl(video, index);
+                if (!thumbnailUrl && !isUploadedVideo(video)) return null;
 
                 return (
                   <button
@@ -104,13 +135,19 @@ export default function VideoSection({ videos }: VideoSectionProps) {
                         : 'hover:ring-2 hover:ring-white/50'
                     }`}
                   >
-                    <Image
-                      src={getYouTubeThumbnail(videoId)}
-                      alt={`Video ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 33vw"
-                    />
+                    {thumbnailUrl ? (
+                      <Image
+                        src={thumbnailUrl}
+                        alt={`Video ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">
+                        <FaPlay className="w-8 h-8 text-gray-400" />
+                      </div>
+                    )}
                     <div
                       className={`absolute inset-0 flex items-center justify-center transition-colors ${
                         index === activeIndex ? 'bg-black/30' : 'bg-black/50 group-hover:bg-black/30'

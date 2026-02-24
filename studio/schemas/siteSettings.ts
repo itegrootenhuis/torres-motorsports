@@ -65,6 +65,15 @@ export default defineType({
               scheme: ['http', 'https'],
             }),
         }),
+        defineField({
+          name: 'threads',
+          title: 'Threads URL',
+          type: 'url',
+          validation: (Rule) =>
+            Rule.uri({
+              scheme: ['http', 'https'],
+            }),
+        }),
       ],
     }),
     defineField({

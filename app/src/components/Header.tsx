@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaTiktok, FaYoutube, FaFacebookF, FaTwitter, FaInstagram, FaBars, FaTimes } from 'react-icons/fa';
+import { FaThreads } from 'react-icons/fa6';
 import { SiteSettings } from '@/types';
 import { urlFor } from '@/lib/sanity';
 
 interface HeaderProps {
   settings: SiteSettings;
+  hasSponsors?: boolean;
 }
 
-const navLinks = [
+const allNavLinks = [
   { href: '#about', label: 'About' },
   { href: '#news', label: 'News' },
   { href: '#videos', label: 'Videos' },
@@ -20,7 +22,10 @@ const navLinks = [
   { href: '#contact', label: 'Contact' },
 ];
 
-export default function Header({ settings }: HeaderProps) {
+export default function Header({ settings, hasSponsors = true }: HeaderProps) {
+  const navLinks = hasSponsors 
+    ? allNavLinks 
+    : allNavLinks.filter(link => link.href !== '#sponsors');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -41,6 +46,7 @@ export default function Header({ settings }: HeaderProps) {
     { key: 'facebook', icon: FaFacebookF, url: socialLinks?.facebook },
     { key: 'twitter', icon: FaTwitter, url: socialLinks?.twitter },
     { key: 'instagram', icon: FaInstagram, url: socialLinks?.instagram },
+    { key: 'threads', icon: FaThreads, url: socialLinks?.threads },
   ].filter((social) => social.url);
 
   return (
@@ -50,9 +56,9 @@ export default function Header({ settings }: HeaderProps) {
       }`}
     >
       <div className="container-custom mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="relative flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0 z-10">
             {settings?.logo ? (
               <Image
                 src={urlFor(settings.logo).width(200).height(60).url()}
@@ -69,8 +75,8 @@ export default function Header({ settings }: HeaderProps) {
             )}
           </Link>
 
-          {/* Desktop Navigation - Centered */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 space-x-8">
+          {/* Desktop Navigation - Absolutely Centered */}
+          <nav className="hidden lg:flex items-center justify-center space-x-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -83,7 +89,7 @@ export default function Header({ settings }: HeaderProps) {
           </nav>
 
           {/* Social Links */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 z-10">
             {socialIcons.map((social) => (
               <a
                 key={social.key}
@@ -100,7 +106,7 @@ export default function Header({ settings }: HeaderProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-primary-black p-2"
+            className="lg:hidden text-primary-black p-2 z-10"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >

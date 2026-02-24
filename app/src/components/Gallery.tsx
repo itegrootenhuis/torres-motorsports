@@ -80,7 +80,7 @@ export default function Gallery({ images }: GalleryProps) {
             className="relative aspect-square overflow-hidden group cursor-pointer"
           >
             <Image
-              src={urlFor(image.image).width(600).height(600).quality(80).url()}
+              src={urlFor(image.image).width(600).height(600).fit('crop').quality(80).url()}
               alt={image.altText}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"

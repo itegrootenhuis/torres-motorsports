@@ -46,7 +46,6 @@ export const newsArticlesQuery = groq`
     _id,
     _type,
     title,
-    body,
     image,
     date,
     externalLink
@@ -57,7 +56,10 @@ export const videosQuery = groq`
   *[_type == "video"] | order(_createdAt desc) {
     _id,
     _type,
-    youtubeUrl
+    youtubeUrl,
+    videoFile,
+    "videoFileUrl": videoFile.asset->url,
+    thumbnail
   }
 `;
 
@@ -102,6 +104,16 @@ export const contactSectionQuery = groq`
   }
 `;
 
+export const scheduleEventsQuery = groq`
+  *[_type == "scheduleEvent" && endDate >= now()] | order(startDate asc) {
+    _id,
+    _type,
+    raceName,
+    startDate,
+    endDate
+  }
+`;
+
 export const homePageQuery = groq`
   {
     "siteSettings": ${siteSettingsQuery},
@@ -110,6 +122,7 @@ export const homePageQuery = groq`
     "newsArticles": ${newsArticlesQuery},
     "videos": ${videosQuery},
     "galleryImages": ${galleryImagesQuery},
+    "scheduleEvents": ${scheduleEventsQuery},
     "sponsors": ${sponsorsQuery},
     "contactSection": ${contactSectionQuery}
   }

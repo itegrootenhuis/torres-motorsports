@@ -50,6 +50,10 @@ export default defineConfig({
               .schemaType('galleryImage')
               .child(S.documentTypeList('galleryImage').title('Gallery Images')),
             S.listItem()
+              .title('Schedule')
+              .schemaType('scheduleEvent')
+              .child(S.documentTypeList('scheduleEvent').title('Schedule Events')),
+            S.listItem()
               .title('Sponsors')
               .schemaType('sponsor')
               .child(S.documentTypeList('sponsor').title('Sponsors')),

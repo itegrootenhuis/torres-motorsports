@@ -9,9 +9,9 @@ export default defineType({
       name: 'youtubeUrl',
       title: 'YouTube URL',
       type: 'url',
-      description: 'Paste the full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID)',
+      description: 'Paste the full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID). Leave empty if uploading a video file.',
       validation: (Rule) =>
-        Rule.required().uri({
+        Rule.uri({
           scheme: ['http', 'https'],
         }).custom((url) => {
           if (!url) return true;
@@ -22,14 +22,45 @@ export default defineType({
           return true;
         }),
     }),
+    defineField({
+      name: 'videoFile',
+      title: 'Video File',
+      type: 'file',
+      description: 'Upload a video file directly (MP4, WebM, etc.). Leave empty if using YouTube URL.',
+      options: {
+        accept: 'video/*',
+      },
+    }),
+    defineField({
+      name: 'thumbnail',
+      title: 'Thumbnail',
+      type: 'image',
+      description: 'Custom thumbnail for uploaded videos. Required if uploading a video file, optional for YouTube videos.',
+      options: {
+        hotspot: true,
+      },
+    }),
   ],
+  validation: (Rule) =>
+    Rule.custom((fields) => {
+      const hasYoutube = fields?.youtubeUrl;
+      const hasVideoFile = fields?.videoFile;
+      if (!hasYoutube && !hasVideoFile) {
+        return 'Please provide either a YouTube URL or upload a video file';
+      }
+      return true;
+    }),
   preview: {
     select: {
       url: 'youtubeUrl',
+      file: 'videoFile',
+      thumbnail: 'thumbnail',
     },
-    prepare({ url }) {
+    prepare({ url, file, thumbnail }) {
+      const title = url ? url : (file ? 'Uploaded Video' : 'No video');
       return {
-        title: url || 'No URL',
+        title,
+        media: thumbnail,
       };
     },
   },

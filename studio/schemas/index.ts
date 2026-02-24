@@ -7,6 +7,7 @@ import galleryImage from './galleryImage';
 import sponsor from './sponsor';
 import legalPage from './legalPage';
 import contactSection from './contactSection';
+import scheduleEvent from './scheduleEvent';
 
 export const schemaTypes = [
   siteSettings,
@@ -18,4 +19,5 @@ export const schemaTypes = [
   sponsor,
   legalPage,
   contactSection,
+  scheduleEvent,
 ];
