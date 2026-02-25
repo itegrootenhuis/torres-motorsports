@@ -6,6 +6,15 @@ import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { ContactFormData, ContactSection } from '@/types';
 
+declare global {
+  interface Window {
+    grecaptcha?: {
+      ready: (cb: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
+}
+
 interface ContactFormProps {
   contactSection?: ContactSection;
 }
@@ -33,20 +42,37 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
     setSubmitStatus('idle');
   };
 
+  const getRecaptchaToken = async (): Promise<string | undefined> => {
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    if (!siteKey || typeof window === 'undefined' || !window.grecaptcha) return undefined;
+    return new Promise((resolve) => {
+      window.grecaptcha!.ready(async () => {
+        try {
+          const token = await window.grecaptcha!.execute(siteKey, { action: 'contact' });
+          resolve(token);
+        } catch {
+          resolve(undefined);
+        }
+      });
+    });
+  };
+
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
-      // TODO: Implement form submission endpoint
-      // For now, simulate a successful submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const recaptchaToken = await getRecaptchaToken();
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, recaptchaToken }),
+      });
 
-      // reCAPTCHA v3 integration (commented out for now)
-      // const recaptchaToken = await grecaptcha.execute('YOUR_SITE_KEY', { action: 'contact' });
-      // Include recaptchaToken in your API call
-
-      console.log('Form submitted:', data);
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error || 'Failed to send message');
+      }
       setSubmitStatus('success');
       reset();
     } catch (error) {
@@ -212,14 +238,12 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                   )}
                 </div>
 
-                {/* reCAPTCHA Notice (commented out for now) */}
-                {/* 
                 <p className="text-xs text-gray-500">
                   This site is protected by reCAPTCHA and the Google{' '}
-                  <a href="https://policies.google.com/privacy" className="underline">Privacy Policy</a> and{' '}
-                  <a href="https://policies.google.com/terms" className="underline">Terms of Service</a> apply.
+                  <a href="https://policies.google.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                  {' '}and{' '}
+                  <a href="https://policies.google.com/terms" className="underline" target="_blank" rel="noopener noreferrer">Terms of Service</a> apply.
                 </p>
-                */}
 
                 {/* Submit Button */}
                 <button

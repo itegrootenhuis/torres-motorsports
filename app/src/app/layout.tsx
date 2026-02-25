@@ -81,8 +81,13 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        {/* reCAPTCHA v3 script - uncomment when ready */}
-        {/* <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY" async defer></script> */}
+        {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+          <script
+            src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+            async
+            defer
+          />
+        )}
       </head>
       <body className={`${inter.className} antialiased`}>
         {children}
