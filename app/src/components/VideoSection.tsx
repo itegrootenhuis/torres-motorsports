@@ -99,26 +99,26 @@ export default function VideoSection({ videos }: VideoSectionProps) {
         {/* Carousel */}
         {videos.length > 1 && (
           <div className="relative">
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons - inset from edges */}
             <button
               onClick={() => scrollCarousel('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-primary-red/90 hover:bg-primary-red text-white p-3 rounded-full shadow-lg transition-colors -translate-x-1/2"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-primary-red/90 hover:bg-primary-red text-white p-3 rounded-full shadow-lg transition-colors"
               aria-label="Previous videos"
             >
               <FaChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scrollCarousel('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-primary-red/90 hover:bg-primary-red text-white p-3 rounded-full shadow-lg transition-colors translate-x-1/2"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-primary-red/90 hover:bg-primary-red text-white p-3 rounded-full shadow-lg transition-colors"
               aria-label="Next videos"
             >
               <FaChevronRight className="w-4 h-4" />
             </button>
 
-            {/* Carousel Container */}
+            {/* Carousel: 1 thumb mobile (<640), 2 thumb tablet (sm–lg), 3 thumb desktop (lg+); scroll by visible amount */}
             <div
               ref={carouselRef}
-              className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-8"
+              className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory px-8"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {videos.map((video, index) => {
@@ -129,7 +129,7 @@ export default function VideoSection({ videos }: VideoSectionProps) {
                   <button
                     key={video._id}
                     onClick={() => setActiveIndex(index)}
-                    className={`flex-shrink-0 w-[calc(33.333%-1rem)] min-w-[200px] relative aspect-video rounded-lg overflow-hidden group transition-all duration-300 ${
+                    className={`flex-shrink-0 w-full min-w-full sm:w-[calc(50%-0.5rem)] sm:min-w-[200px] lg:w-[calc(33.333%-0.5rem)] lg:min-w-[200px] snap-center snap-always sm:snap-start relative aspect-video rounded-lg overflow-hidden group transition-all duration-300 ${
                       index === activeIndex
                         ? 'ring-4 ring-primary-red'
                         : 'hover:ring-2 hover:ring-white/50'
@@ -141,7 +141,7 @@ export default function VideoSection({ videos }: VideoSectionProps) {
                         alt={`Video ${index + 1}`}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">

@@ -11,10 +11,11 @@ interface GalleryProps {
   images: GalleryImage[];
 }
 
-const IMAGES_PER_BATCH = 12;
+const INITIAL_VISIBLE = 6;
+const IMAGES_PER_BATCH = 6;
 
 export default function Gallery({ images }: GalleryProps) {
-  const [visibleCount, setVisibleCount] = useState(IMAGES_PER_BATCH);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const visibleImages = images.slice(0, visibleCount);
@@ -67,15 +68,15 @@ export default function Gallery({ images }: GalleryProps) {
         </motion.h2>
       </div>
 
-      {/* Gallery Grid - Full Width, No Padding */}
-      <div className="grid grid-cols-3 w-full">
+      {/* Gallery Grid - single column on mobile, 3 columns on md+ */}
+      <div className="grid grid-cols-1 md:grid-cols-3 w-full">
         {visibleImages.map((image, index) => (
           <motion.button
             key={image._id}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.4, delay: (index % IMAGES_PER_BATCH) * 0.05 }}
+            transition={{ duration: 0.4, delay: (index % INITIAL_VISIBLE) * 0.05 }}
             onClick={() => openLightbox(index)}
             className="relative aspect-square overflow-hidden group cursor-pointer"
           >
@@ -84,7 +85,7 @@ export default function Gallery({ images }: GalleryProps) {
               alt={image.altText}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
-              sizes="33vw"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
           </motion.button>

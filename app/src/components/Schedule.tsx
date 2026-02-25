@@ -50,7 +50,7 @@ export default function Schedule({ events }: ScheduleProps) {
   if (!events || events.length === 0) return null;
 
   return (
-    <section id="schedule" className="section-padding bg-primary-black">
+    <section id="schedule" className="section-padding pb-0 bg-primary-black">
       <div className="container-custom mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

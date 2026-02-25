@@ -88,8 +88,8 @@ export default function Header({ settings, hasSponsors = true }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Social Links */}
-          <div className="hidden md:flex items-center space-x-4 z-10">
+          {/* Social Links - same breakpoint as nav so both are in hamburger below lg */}
+          <div className="hidden lg:flex items-center space-x-4 z-10">
             {socialIcons.map((social) => (
               <a
                 key={social.key}
@@ -118,7 +118,7 @@ export default function Header({ settings, hasSponsors = true }: HeaderProps) {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-white border-t">
-          <nav className="container-custom mx-auto px-4 py-4">
+          <nav className="container-custom mx-auto px-4 py-4 text-right">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -129,7 +129,7 @@ export default function Header({ settings, hasSponsors = true }: HeaderProps) {
                 {link.label}
               </a>
             ))}
-            <div className="flex items-center space-x-4 pt-4 border-t mt-4">
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t mt-4">
               {socialIcons.map((social) => (
                 <a
                   key={social.key}

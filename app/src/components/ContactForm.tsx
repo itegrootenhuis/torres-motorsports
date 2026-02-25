@@ -130,12 +130,12 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-zinc-900 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto"
+              className="bg-zinc-900 rounded-lg w-full max-w-lg max-h-[95dvh] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-6 border-b border-zinc-700">
-                <h3 className="text-2xl font-bold text-white">Contact Us</h3>
+              <div className="flex items-center justify-between p-4 md:p-6 border-b border-zinc-700 flex-shrink-0">
+                <h3 className="text-xl md:text-2xl font-bold text-white">Contact Us</h3>
                 <button
                   onClick={closeModal}
                   className="text-gray-400 hover:text-white transition-colors"
@@ -145,16 +145,16 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                 </button>
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+              {/* Form - compact on mobile to avoid scrollbar */}
+              <form onSubmit={handleSubmit(onSubmit)} className="p-4 md:p-6 space-y-3 md:space-y-4 flex-1 min-h-0">
                 {/* First Name & Last Name */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
                   <div>
                     <input
                       {...register('firstName', { required: 'First name is required' })}
                       type="text"
                       placeholder="First Name *"
-                      className={`w-full px-4 py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red ${
+                      className={`w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red text-sm md:text-base ${
                         errors.firstName ? 'border-red-500' : 'border-zinc-700'
                       }`}
                     />
@@ -167,7 +167,7 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                       {...register('lastName', { required: 'Last name is required' })}
                       type="text"
                       placeholder="Last Name *"
-                      className={`w-full px-4 py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red ${
+                      className={`w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red text-sm md:text-base ${
                         errors.lastName ? 'border-red-500' : 'border-zinc-700'
                       }`}
                     />
@@ -189,7 +189,7 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                     })}
                     type="email"
                     placeholder="Email *"
-                    className={`w-full px-4 py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red ${
+                    className={`w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red text-sm md:text-base ${
                       errors.email ? 'border-red-500' : 'border-zinc-700'
                     }`}
                   />
@@ -204,7 +204,7 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                     {...register('phone', { required: 'Phone number is required' })}
                     type="tel"
                     placeholder="Phone *"
-                    className={`w-full px-4 py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red ${
+                    className={`w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red text-sm md:text-base ${
                       errors.phone ? 'border-red-500' : 'border-zinc-700'
                     }`}
                   />
@@ -219,7 +219,7 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                     {...register('company')}
                     type="text"
                     placeholder="Company (Optional)"
-                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red"
+                    className="w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border border-zinc-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red text-sm md:text-base"
                   />
                 </div>
 
@@ -228,8 +228,8 @@ export default function ContactForm({ contactSection }: ContactFormProps) {
                   <textarea
                     {...register('details', { required: 'Please provide some details' })}
                     placeholder="Details *"
-                    rows={4}
-                    className={`w-full px-4 py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red resize-none ${
+                    rows={3}
+                    className={`w-full px-3 md:px-4 py-2 md:py-3 bg-zinc-800 border rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-red resize-none text-sm md:text-base min-h-[72px] md:min-h-0 ${
                       errors.details ? 'border-red-500' : 'border-zinc-700'
                     }`}
                   />
