@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -11,12 +11,30 @@ interface GalleryProps {
   images: GalleryImage[];
 }
 
-const INITIAL_VISIBLE = 6;
-const IMAGES_PER_BATCH = 6;
+const INITIAL_VISIBLE_MOBILE = 6;
+const INITIAL_VISIBLE_DESKTOP = 12;
+const BATCH_MOBILE = 6;
+const BATCH_DESKTOP = 12;
 
 export default function Gallery({ images }: GalleryProps) {
-  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_MOBILE);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => {
+      const desktop = mq.matches;
+      setIsDesktop(desktop);
+      setVisibleCount((prev) => {
+        const initial = desktop ? INITIAL_VISIBLE_DESKTOP : INITIAL_VISIBLE_MOBILE;
+        return Math.max(prev, Math.min(initial, images.length));
+      });
+    };
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, [images.length]);
 
   const visibleImages = images.slice(0, visibleCount);
   const hasMore = visibleCount < images.length;
@@ -49,7 +67,8 @@ export default function Gallery({ images }: GalleryProps) {
   );
 
   const loadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + IMAGES_PER_BATCH, images.length));
+    const batch = isDesktop ? BATCH_DESKTOP : BATCH_MOBILE;
+    setVisibleCount((prev) => Math.min(prev + batch, images.length));
   };
 
   if (!images || images.length === 0) return null;
@@ -76,7 +95,7 @@ export default function Gallery({ images }: GalleryProps) {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.4, delay: (index % INITIAL_VISIBLE) * 0.05 }}
+            transition={{ duration: 0.4, delay: (index % INITIAL_VISIBLE_DESKTOP) * 0.05 }}
             onClick={() => openLightbox(index)}
             className="relative aspect-square overflow-hidden group cursor-pointer"
           >
