@@ -56,3 +56,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #b91c1c;
 }
+
+/* reCAPTCHA v3 badge - hidden; disclosure is in the contact form */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
