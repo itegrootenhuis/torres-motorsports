@@ -16,11 +16,11 @@ const racingSansOne = Racing_Sans_One({
 export const metadata: Metadata = {
   metadataBase: new URL('https://torresmotorsports.com'),
   title: {
-    default: 'Torres Motorsports | Ricardo Torres Racing',
+    default: 'Ricardo Torres | Torres Motorsports | Ricardo Torres Racing',
     template: '%s | Torres Motorsports',
   },
   description:
-    'Official website of Ricardo Torres and Torres Motorsports. Follow the racing journey, latest news, videos, and sponsorship opportunities.',
+    'Official website of Ricardo Torres, professional motorsports driver. News, racing schedule, sponsors, and media.',
   keywords: [
     'Torres Motorsports',
     'Ricardo Torres',

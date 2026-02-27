@@ -202,7 +202,7 @@ export default function Bio({ bio }: BioProps) {
 
           {/* Content */}
           <div className={hasImage ? '' : ''}>
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
@@ -210,7 +210,7 @@ export default function Bio({ bio }: BioProps) {
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 uppercase"
             >
               {bio.heading}
-            </motion.h2>
+            </motion.h1>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
