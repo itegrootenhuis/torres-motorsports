@@ -105,7 +105,7 @@ export const contactSectionQuery = groq`
 `;
 
 export const scheduleEventsQuery = groq`
-  *[_type == "scheduleEvent" && endDate >= now()] | order(startDate asc) {
+  *[_type == "scheduleEvent"] | order(startDate asc, endDate asc) {
     _id,
     _type,
     raceName,
